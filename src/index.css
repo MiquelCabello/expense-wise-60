@@ -2,41 +2,65 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* ExpenseWise Design System - Professional Financial App Theme */
 
 @layer base {
   :root {
+    /* Brand Colors - Professional Financial Palette */
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 215 25% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 215 25% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 215 25% 15%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary - Corporate Blue */
+    --primary: 216 87% 52%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 217 91% 62%;
+    
+    /* Secondary - Professional Gray */
+    --secondary: 210 17% 95%;
+    --secondary-foreground: 215 25% 15%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Muted - Subtle Backgrounds */
+    --muted: 210 17% 97%;
+    --muted-foreground: 215 15% 45%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Accent - Success Green for Approvals */
+    --accent: 145 63% 49%;
+    --accent-foreground: 0 0% 100%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Status Colors */
+    --success: 145 63% 49%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 100% 50%;
+    --warning-foreground: 0 0% 100%;
+    --destructive: 0 73% 57%;
+    --destructive-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Interface Elements */
+    --border: 215 20% 90%;
+    --input: 215 20% 90%;
+    --ring: 216 87% 52%;
 
     --radius: 0.5rem;
+
+    /* Gradients for Professional UI */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-card: linear-gradient(145deg, hsl(var(--card)), hsl(var(--muted)));
+    --gradient-success: linear-gradient(135deg, hsl(var(--success)), hsl(145 63% 59%));
+    
+    /* Shadows for Depth */
+    --shadow-card: 0 2px 8px hsl(var(--foreground) / 0.04);
+    --shadow-dialog: 0 10px 40px hsl(var(--foreground) / 0.15);
+    --shadow-primary: 0 4px 20px hsl(var(--primary) / 0.3);
+    
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.15s ease-out;
 
     --sidebar-background: 0 0% 98%;
 
