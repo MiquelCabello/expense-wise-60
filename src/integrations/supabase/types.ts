@@ -14,7 +14,265 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      audit_logs: {
+        Row: {
+          action: string
+          actor_user_id: string
+          created_at: string
+          entity: string
+          entity_id: string | null
+          id: string
+          ip_address: unknown | null
+          metadata: Json | null
+        }
+        Insert: {
+          action: string
+          actor_user_id: string
+          created_at?: string
+          entity: string
+          entity_id?: string | null
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+        }
+        Update: {
+          action?: string
+          actor_user_id?: string
+          created_at?: string
+          entity?: string
+          entity_id?: string | null
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+        }
+        Relationships: []
+      }
+      categories: {
+        Row: {
+          budget_monthly: number | null
+          created_at: string
+          id: string
+          name: string
+          status: Database["public"]["Enums"]["user_status"]
+          updated_at: string
+        }
+        Insert: {
+          budget_monthly?: number | null
+          created_at?: string
+          id?: string
+          name: string
+          status?: Database["public"]["Enums"]["user_status"]
+          updated_at?: string
+        }
+        Update: {
+          budget_monthly?: number | null
+          created_at?: string
+          id?: string
+          name?: string
+          status?: Database["public"]["Enums"]["user_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      expenses: {
+        Row: {
+          amount_gross: number
+          amount_net: number
+          approved_at: string | null
+          approver_id: string | null
+          category_id: string
+          created_at: string
+          currency: Database["public"]["Enums"]["currency_type"]
+          document_type: Database["public"]["Enums"]["document_type"] | null
+          employee_id: string
+          expense_date: string
+          hash_dedupe: string | null
+          id: string
+          iva_rate: number | null
+          notes: string | null
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          project_code_id: string | null
+          receipt_file_id: string | null
+          rejection_reason: string | null
+          source: Database["public"]["Enums"]["expense_source"]
+          status: Database["public"]["Enums"]["expense_status"]
+          tax_vat: number | null
+          updated_at: string
+          vendor: string
+        }
+        Insert: {
+          amount_gross: number
+          amount_net: number
+          approved_at?: string | null
+          approver_id?: string | null
+          category_id: string
+          created_at?: string
+          currency?: Database["public"]["Enums"]["currency_type"]
+          document_type?: Database["public"]["Enums"]["document_type"] | null
+          employee_id: string
+          expense_date: string
+          hash_dedupe?: string | null
+          id?: string
+          iva_rate?: number | null
+          notes?: string | null
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          project_code_id?: string | null
+          receipt_file_id?: string | null
+          rejection_reason?: string | null
+          source?: Database["public"]["Enums"]["expense_source"]
+          status?: Database["public"]["Enums"]["expense_status"]
+          tax_vat?: number | null
+          updated_at?: string
+          vendor: string
+        }
+        Update: {
+          amount_gross?: number
+          amount_net?: number
+          approved_at?: string | null
+          approver_id?: string | null
+          category_id?: string
+          created_at?: string
+          currency?: Database["public"]["Enums"]["currency_type"]
+          document_type?: Database["public"]["Enums"]["document_type"] | null
+          employee_id?: string
+          expense_date?: string
+          hash_dedupe?: string | null
+          id?: string
+          iva_rate?: number | null
+          notes?: string | null
+          payment_method?: Database["public"]["Enums"]["payment_method"]
+          project_code_id?: string | null
+          receipt_file_id?: string | null
+          rejection_reason?: string | null
+          source?: Database["public"]["Enums"]["expense_source"]
+          status?: Database["public"]["Enums"]["expense_status"]
+          tax_vat?: number | null
+          updated_at?: string
+          vendor?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expenses_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_project_code_id_fkey"
+            columns: ["project_code_id"]
+            isOneToOne: false
+            referencedRelation: "project_codes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_receipt_file_id_fkey"
+            columns: ["receipt_file_id"]
+            isOneToOne: false
+            referencedRelation: "files"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      files: {
+        Row: {
+          checksum_sha256: string
+          created_at: string
+          id: string
+          mime_type: string
+          original_name: string
+          size_bytes: number
+          storage_key: string
+          uploaded_by: string
+        }
+        Insert: {
+          checksum_sha256: string
+          created_at?: string
+          id?: string
+          mime_type: string
+          original_name: string
+          size_bytes: number
+          storage_key: string
+          uploaded_by: string
+        }
+        Update: {
+          checksum_sha256?: string
+          created_at?: string
+          id?: string
+          mime_type?: string
+          original_name?: string
+          size_bytes?: number
+          storage_key?: string
+          uploaded_by?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          department: string | null
+          email: string
+          id: string
+          name: string
+          region: string | null
+          role: Database["public"]["Enums"]["user_role"]
+          status: Database["public"]["Enums"]["user_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          department?: string | null
+          email: string
+          id?: string
+          name: string
+          region?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
+          status?: Database["public"]["Enums"]["user_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          department?: string | null
+          email?: string
+          id?: string
+          name?: string
+          region?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
+          status?: Database["public"]["Enums"]["user_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      project_codes: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          name: string
+          status: Database["public"]["Enums"]["user_status"]
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          name: string
+          status?: Database["public"]["Enums"]["user_status"]
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          name?: string
+          status?: Database["public"]["Enums"]["user_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +281,13 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      currency_type: "EUR" | "USD" | "GBP" | "CHF"
+      document_type: "TICKET" | "INVOICE"
+      expense_source: "MANUAL" | "AI_EXTRACTED"
+      expense_status: "PENDING" | "APPROVED" | "REJECTED"
+      payment_method: "CARD" | "CASH" | "TRANSFER" | "OTHER"
+      user_role: "ADMIN" | "APPROVER" | "EMPLOYEE"
+      user_status: "ACTIVE" | "INACTIVE"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +414,14 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      currency_type: ["EUR", "USD", "GBP", "CHF"],
+      document_type: ["TICKET", "INVOICE"],
+      expense_source: ["MANUAL", "AI_EXTRACTED"],
+      expense_status: ["PENDING", "APPROVED", "REJECTED"],
+      payment_method: ["CARD", "CASH", "TRANSFER", "OTHER"],
+      user_role: ["ADMIN", "APPROVER", "EMPLOYEE"],
+      user_status: ["ACTIVE", "INACTIVE"],
+    },
   },
 } as const
