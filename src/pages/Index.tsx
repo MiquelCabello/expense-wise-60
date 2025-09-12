@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/hooks/use-auth';
+import heroImage from '@/assets/hero-dashboard.jpg';
 import { 
   Receipt, 
   TrendingUp, 
@@ -159,13 +160,14 @@ const Index = () => {
                 </div>
               </div>
             </div>
-            <div className="bg-gradient-primary rounded-2xl p-8 text-white">
-              <div className="text-4xl font-bold mb-2">90%</div>
-              <div className="text-white/90 mb-4">Reducción en tiempo de procesamiento</div>
-              <div className="text-4xl font-bold mb-2">99.9%</div>
-              <div className="text-white/90 mb-4">Precisión en extracción de datos</div>
-              <div className="text-4xl font-bold mb-2">100%</div>
-              <div className="text-white/90">Satisfacción del cliente</div>
+            <div className="relative">
+              <img 
+                src={heroImage} 
+                alt="Dashboard de ExpenseWise" 
+                className="rounded-2xl shadow-dialog w-full"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-primary/10 rounded-2xl"></div>
             </div>
           </div>
         </div>

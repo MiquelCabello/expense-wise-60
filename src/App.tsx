@@ -8,6 +8,7 @@ import { Layout } from "@/components/Layout";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
+import UploadReceipt from "./pages/UploadReceipt";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,7 +24,8 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
-            {/* Protected routes will go here */}
+            <Route path="/upload" element={<Layout><UploadReceipt /></Layout>} />
+            {/* More protected routes will go here */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
