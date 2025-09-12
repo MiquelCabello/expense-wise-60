@@ -39,13 +39,12 @@ const Dashboard = () => {
     try {
       setLoading(true);
       
-      // Fetch KPIs
+      // Fetch KPIs with simplified query
       const { data: expenses } = await supabase
         .from('expenses')
         .select(`
           *,
-          category:categories!inner(name),
-          employee:profiles!expenses_employee_id_fkey(name)
+          category:categories(name)
         `)
         .order('created_at', { ascending: false });
 
@@ -256,9 +255,6 @@ const Dashboard = () => {
                       <p className="font-medium">{expense.vendor}</p>
                       <p className="text-sm text-muted-foreground">
                         {(expense.category as any)?.name || 'Sin categoría'} • {new Date(expense.expense_date).toLocaleDateString('es-ES')}
-                        {isAdmin && (expense.employee as any) && (
-                          <> • {(expense.employee as any).name}</>
-                        )}
                       </p>
                     </div>
                   </div>
