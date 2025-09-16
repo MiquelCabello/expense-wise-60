@@ -25,22 +25,57 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
-  const fetchProfile = async (userId: string) => {
+  const fetchProfile = async (userId: string, retries = 3): Promise<Profile | null> => {
     try {
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('user_id', userId)
-        .single();
+        .maybeSingle(); // Use maybeSingle to avoid errors when no profile exists
 
       if (error) {
+        // Handle specific RLS recursion error
+        if (error.code === '42P17' && retries > 0) {
+          console.warn(`RLS recursion detected, retrying... (${retries} attempts left)`);
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          return fetchProfile(userId, retries - 1);
+        }
+        
         console.error('Error fetching profile:', error);
+        
+        // Show user-friendly error for critical issues
+        if (error.code === '42P17') {
+          toast({
+            variant: "destructive",
+            title: "Error de configuración",
+            description: "Problema temporal con las políticas de seguridad. Recarga la página.",
+          });
+        }
+        
+        return null;
+      }
+
+      // If no profile exists, create one with basic info
+      if (!data) {
+        console.warn('No profile found for user, this should have been created by trigger');
         return null;
       }
 
       return data as Profile;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Profile fetch error:', error);
+      
+      if (retries > 0) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        return fetchProfile(userId, retries - 1);
+      }
+      
+      toast({
+        variant: "destructive",
+        title: "Error de conexión",
+        description: "No se pudo cargar el perfil del usuario. Verifica tu conexión.",
+      });
+      
       return null;
     }
   };

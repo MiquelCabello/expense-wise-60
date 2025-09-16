@@ -103,14 +103,14 @@ const UploadReceipt = () => {
 
   const handleFile = async (file: File) => {
     // Validate file
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'application/pdf'];
     const maxSize = 10 * 1024 * 1024; // 10MB
 
     if (!validTypes.includes(file.type)) {
       toast({
         variant: "destructive",
         title: "Tipo de archivo no válido",
-        description: "Solo se permiten imágenes (JPG, PNG) y PDF",
+        description: "Solo se permiten imágenes (JPG, PNG, WEBP) y PDF",
       });
       return;
     }
@@ -124,44 +124,74 @@ const UploadReceipt = () => {
       return;
     }
 
+    if (!user?.id) {
+      toast({
+        variant: "destructive",
+        title: "Error de autenticación",
+        description: "Debes iniciar sesión para subir archivos",
+      });
+      return;
+    }
+
     setUploading(true);
 
     try {
-      // Upload file to Supabase Storage (we'll create a simple files table entry for now)
-      const checksum = await generateChecksum(file);
-      const storageKey = `receipts/${Date.now()}_${file.name}`;
+      // Generate unique file path with user folder
+      const fileExt = file.name.split('.').pop()?.toLowerCase();
+      const fileName = `${user.id}/${Date.now()}_${crypto.randomUUID()}.${fileExt}`;
+      
+      // Upload to Supabase Storage
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('receipts')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
 
-      // Create file record
+      if (uploadError) {
+        console.error('Storage upload error:', uploadError);
+        throw new Error(`Error al subir archivo: ${uploadError.message}`);
+      }
+
+      // Generate checksum for deduplication
+      const checksum = await generateChecksum(file);
+
+      // Create file record in database
       const { data: fileData, error: fileError } = await supabase
         .from('files')
         .insert({
           original_name: file.name,
           mime_type: file.type,
           size_bytes: file.size,
-          storage_key: storageKey,
+          storage_key: uploadData.path,
           checksum_sha256: checksum,
-          uploaded_by: user?.id
+          uploaded_by: user.id
         })
         .select()
         .single();
 
       if (fileError) {
-        throw fileError;
+        console.error('Database insert error:', fileError);
+        // Cleanup storage if database insert fails
+        await supabase.storage.from('receipts').remove([uploadData.path]);
+        throw new Error(`Error al guardar información del archivo: ${fileError.message}`);
       }
 
-      // Create preview
-      const preview = URL.createObjectURL(file);
+      // Create preview URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('receipts')
+        .getPublicUrl(uploadData.path);
       
       setUploadedFile({
         id: fileData.id,
         name: file.name,
         size: file.size,
         type: file.type,
-        preview
+        preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : publicUrl
       });
 
       toast({
-        title: "Archivo subido correctamente",
+        title: "✅ Archivo subido correctamente",
         description: "Ahora puedes procesar el documento con IA",
       });
 
@@ -169,8 +199,8 @@ const UploadReceipt = () => {
       console.error('Upload error:', error);
       toast({
         variant: "destructive",
-        title: "Error al subir archivo",
-        description: error.message,
+        title: "❌ Error al subir archivo",
+        description: error.message || "Error desconocido al subir el archivo",
       });
     } finally {
       setUploading(false);

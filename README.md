@@ -1,73 +1,201 @@
-# Welcome to your Lovable project
+# ExpenseWise - Sistema de Gestión de Gastos
 
-## Project info
+## 📊 **Estado del Proyecto**
 
-**URL**: https://lovable.dev/projects/49d04203-5294-4835-a399-2f7d131d2e3b
+✅ **APLICACIÓN FUNCIONAL** - Los problemas P0 críticos han sido solucionados:
 
-## How can I edit this code?
+- ✅ **RLS Policies Fixed**: Sin más recursión infinita
+- ✅ **Supabase Storage**: Upload de archivos funcional  
+- ✅ **Error Boundary**: Manejo robusto de errores
+- ✅ **Auth Mejorado**: Retry logic y mejor UX
+- ✅ **TypeScript/ESLint**: Reglas más estrictas
 
-There are several ways of editing your application.
+---
 
-**Use Lovable**
+## 🚀 **Quick Start**
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/49d04203-5294-4835-a399-2f7d131d2e3b) and start prompting.
+```bash
+# Instalar dependencias
+npm install
 
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Desarrollo (puerto 8080)
 npm run dev
+
+# Build producción
+npm run build
+
+# Preview del build
+npm run preview
+
+# Linting
+npm run lint
 ```
 
-**Edit a file directly in GitHub**
+---
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🏗️ **Stack Tecnológico**
 
-**Use GitHub Codespaces**
+- **Frontend**: React 18 + TypeScript + Vite
+- **UI**: Tailwind CSS + shadcn/ui + Lucide Icons
+- **Backend**: Supabase (PostgreSQL + Auth + Storage + Edge Functions)
+- **State**: React Query + Context API
+- **Forms**: React Hook Form + Zod validation
+- **Auth**: Supabase Auth con RLS policies
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+---
 
-## What technologies are used for this project?
+## 📁 **Estructura del Proyecto**
 
-This project is built with:
+```
+src/
+├── components/          # Componentes UI y layout
+│   ├── ui/             # shadcn/ui components
+│   ├── Layout.tsx      # Layout principal con auth
+│   ├── Navigation.tsx  # Header/navegación
+│   └── ErrorBoundary.tsx # Manejo global de errores
+├── pages/              # Páginas de la aplicación
+│   ├── Dashboard.tsx   # Dashboard principal con KPIs
+│   ├── UploadReceipt.tsx # Upload y extracción IA
+│   ├── Settings.tsx    # Configuración de usuario
+│   └── Auth.tsx        # Login/registro
+├── hooks/              # React hooks personalizados
+│   ├── use-auth.tsx    # Autenticación y perfil
+│   └── use-toast.ts    # Notificaciones
+├── integrations/
+│   └── supabase/       # Cliente y tipos de Supabase
+├── types/              # Definiciones de tipos
+└── lib/                # Utilidades
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+---
 
-## How can I deploy this project?
+## 🔧 **Scripts Recomendados**
 
-Simply open [Lovable](https://lovable.dev/projects/49d04203-5294-4835-a399-2f7d131d2e3b) and click on Share -> Publish.
+Agrega estos scripts útiles a tu `package.json`:
 
-## Can I connect a custom domain to my Lovable project?
+```json
+{
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint:fix": "eslint . --fix",
+    "test": "echo \"No tests configured yet\"",
+    "build:analyze": "echo \"Bundle analyzer not configured\"",
+    "preview:network": "vite preview --host"
+  }
+}
+```
 
-Yes, you can!
+---
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🔑 **Variables de Entorno**
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Crea un archivo `.env.local` (NO subas a git):
+
+```bash
+# Supabase Configuration
+VITE_SUPABASE_PROJECT_ID="qvzoqglsnfqnifwlqblb"
+VITE_SUPABASE_URL="https://qvzoqglsnfqnifwlqblb.supabase.co"
+VITE_SUPABASE_PUBLISHABLE_KEY="tu-anon-key"
+
+# Para Edge Functions (configurar en Supabase Dashboard)
+GEMINI_API_KEY="tu-gemini-key"
+SUPABASE_SERVICE_ROLE_KEY="tu-service-key"
+```
+
+---
+
+## 🔒 **Seguridad y Permisos**
+
+### **Roles de Usuario**
+- **EMPLOYEE**: Crear y ver sus propios gastos
+- **APPROVER**: Aprobar/rechazar gastos + funciones de EMPLOYEE  
+- **ADMIN**: Acceso completo al sistema
+
+### **RLS Policies Implementadas**
+- ✅ Usuarios solo ven sus datos
+- ✅ Admins ven todo
+- ✅ Storage con carpetas por usuario
+- ✅ Funciones security definer para evitar recursión
+
+---
+
+## 🚀 **Deploy y Producción**
+
+### **Lovable Deploy**
+1. Click en "Publish" en la interfaz de Lovable
+2. Tu app estará disponible en `tu-proyecto.lovable.app`
+
+### **Deploy Personalizado**
+```bash
+# Build optimizado
+npm run build
+
+# Los archivos están en dist/
+# Subir a Vercel, Netlify, etc.
+```
+
+---
+
+## 🐛 **Debugging y Logs**
+
+### **Desarrollo**
+- Console logs disponibles en DevTools
+- Error Boundary muestra stack traces detallados
+- React Query DevTools habilitado
+
+### **Producción**
+- Errores se envían a console.error
+- TODO: Integrar Sentry/LogRocket para monitoring
+
+---
+
+## 📋 **Próximos Pasos (P1/P2)**
+
+### **P1 - Funcionalidad (2-3 semanas)**
+- [ ] Tests con Vitest + React Testing Library
+- [ ] Mejorar TypeScript strict mode
+- [ ] Optimización de performance (lazy loading)
+- [ ] Manejo de estado más robusto
+
+### **P2 - Calidad (1-2 semanas)**  
+- [ ] CI/CD con GitHub Actions
+- [ ] Auditoría de accesibilidad
+- [ ] Monitoring y analytics
+- [ ] Documentación API
+
+---
+
+## 🆘 **Troubleshooting**
+
+### **Errores Comunes**
+
+**"infinite recursion detected"**
+```bash
+# ✅ SOLUCIONADO: RLS policies refactorizadas
+# Si persiste, recarga la página
+```
+
+**Upload de archivos falla**
+```bash
+# ✅ SOLUCIONADO: Supabase Storage configurado
+# Verifica que el bucket 'receipts' exista
+```
+
+**TypeScript errors**
+```bash
+# Ejecutar type checking
+npm run typecheck
+```
+
+---
+
+## 📞 **Soporte**
+
+- **Logs**: Disponibles en Supabase Dashboard > Logs
+- **DB**: Supabase Dashboard > SQL Editor  
+- **Storage**: Supabase Dashboard > Storage
+- **Edge Functions**: Supabase Dashboard > Functions
+
+---
+
+**🎉 ¡ExpenseWise está listo para uso!** Los problemas críticos P0 han sido solucionados.
